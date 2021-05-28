@@ -14,7 +14,7 @@ import java.util.Optional;
 public class DbService {
 
     @Autowired
-    private final TaskRepository repository;
+    private TaskRepository repository;
 
     public List<Task> getAllTasks(){
         return repository.findAll();

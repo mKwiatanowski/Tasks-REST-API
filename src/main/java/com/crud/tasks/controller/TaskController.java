@@ -13,6 +13,7 @@ import java.util.List;
 @RestController
 @RequestMapping("/v1/task")
 @RequiredArgsConstructor
+@CrossOrigin(origins = "*")
 public class TaskController {
 
     private final DbService service;
@@ -50,7 +51,7 @@ public class TaskController {
     }
 
     @PostMapping(value = "createTask", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void createTask(TaskDto taskDto){
+    public void createTask(@RequestBody TaskDto taskDto){
         Task task = taskMapper.mapToTask(taskDto);
         service.saveTask(task);
     }
