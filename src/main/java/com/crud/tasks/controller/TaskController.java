@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/task")
+@RequestMapping("/v1/task/")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class TaskController {
@@ -20,7 +20,7 @@ public class TaskController {
     private final TaskMapper taskMapper;
 
     @GetMapping(value = "getTasks")
-    public List<TaskDto> getTasks() {
+    public List<TaskDto> getTasks() {git
         List<Task> tasks = service.getAllTasks();
         return taskMapper.mapToTaskDtoList(tasks);
 
