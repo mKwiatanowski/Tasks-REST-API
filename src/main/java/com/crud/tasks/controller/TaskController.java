@@ -20,7 +20,7 @@ public class TaskController {
     private final TaskMapper taskMapper;
 
     @GetMapping(value = "getTasks")
-    public List<TaskDto> getTasks() {git
+    public List<TaskDto> getTasks() {
         List<Task> tasks = service.getAllTasks();
         return taskMapper.mapToTaskDtoList(tasks);
 
