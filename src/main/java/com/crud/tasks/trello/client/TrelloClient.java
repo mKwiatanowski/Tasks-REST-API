@@ -44,7 +44,9 @@ public class TrelloClient {
                 .queryParam("token", trelloToken)
                 .queryParam("fields", "name,id")
                 .queryParam("lists", "all")
-                .build().encode().toUri();
+                .build()
+                .encode()
+                .toUri();
     }
 
     public CreatedTrelloCard createNewCard(TrelloCardDto trelloCardDto) {
