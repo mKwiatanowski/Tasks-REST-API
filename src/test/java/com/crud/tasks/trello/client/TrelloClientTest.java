@@ -5,13 +5,15 @@ import com.crud.tasks.domain.TrelloBadgesDto;
 import com.crud.tasks.domain.TrelloBoardDto;
 import com.crud.tasks.domain.TrelloCardDto;
 import com.crud.tasks.trello.config.TrelloConfig;
-import org.junit.Before;
+import org.aspectj.lang.annotation.Before;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.web.client.RestTemplate;
+
 
 import java.net.URI;
 import java.net.URISyntaxException;
@@ -36,11 +38,12 @@ public class TrelloClientTest {
     @Mock
     private TrelloBadgesDto trelloBadgesDto;
 
-    @Before
+    @BeforeEach
     public void init() {
         when(trelloConfig.getTrelloApiEndpoint()).thenReturn("http://test.com");
         when(trelloConfig.getTrelloAppKey()).thenReturn("test");
         when(trelloConfig.getTrelloToken()).thenReturn("test");
+        when(trelloConfig.getTrelloUsername()).thenReturn("mateuszkwiatanowski");
     }
 
     @Test

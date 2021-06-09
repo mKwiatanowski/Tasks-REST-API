@@ -18,7 +18,6 @@ import java.util.*;
 
 
 @Component
-
 public class TrelloClient {
 
     private static final Logger LOGGER = LoggerFactory.getLogger(TrelloClient.class);
@@ -28,6 +27,7 @@ public class TrelloClient {
 
     @Autowired
     private RestTemplate restTemplate;
+
 
     public List<TrelloBoardDto> getTrelloBoards() {
         URI url = getTrelloBoardsUri();
@@ -43,13 +43,14 @@ public class TrelloClient {
 
     private URI getTrelloBoardsUri() {
         return UriComponentsBuilder.fromHttpUrl(trelloConfig.getTrelloApiEndpoint()
-                + "/members/" + trelloConfig.getTrelloUser() + "/boards")
+                + "/members/" + trelloConfig.getTrelloUsername() + "/boards")
                 .queryParam("key", trelloConfig.getTrelloAppKey())
                 .queryParam("token", trelloConfig.getTrelloToken())
                 .queryParam("fields", "name,id")
                 .queryParam("lists", "all")
                 .build().encode().toUri();
     }
+
 
     public CreatedTrelloCard createNewCard(TrelloCardDto trelloCardDto) {
 
