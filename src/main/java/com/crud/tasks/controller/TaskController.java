@@ -11,7 +11,7 @@ import org.springframework.web.bind.annotation.*;
 import java.util.List;
 
 @RestController
-@RequestMapping("/v1/task")
+@RequestMapping("/v1")
 @RequiredArgsConstructor
 @CrossOrigin(origins = "*")
 public class TaskController {
@@ -19,20 +19,20 @@ public class TaskController {
     private final DbService service;
     private final TaskMapper taskMapper;
 
-    @GetMapping(value = "getTasks")
+    @GetMapping(value = "tasks")
     public List<TaskDto> getTasks() {
         List<Task> tasks = service.getAllTasks();
         return taskMapper.mapToTaskDtoList(tasks);
 
     }
 
-    @GetMapping(value = "getTask")
+    @GetMapping(value = "task")
     public TaskDto getTask(@RequestParam Long taskId) throws TaskNotFoundException {
         return taskMapper.mapToTaskDto(service.getTask(taskId).orElseThrow(TaskNotFoundException::new));
 
     }
 
-    @DeleteMapping(value = "deleteTask")
+    @DeleteMapping(value = "task")
     public void deleteTask(@RequestParam Long taskId) throws TaskNotFoundException {
         if (service.getTask(taskId).isPresent()){
             service.deleteTask(taskId);
@@ -42,7 +42,7 @@ public class TaskController {
 
     }
 
-    @PutMapping(value = "updateTask")
+    @PutMapping(value = "task")
     public TaskDto updateTask(@RequestBody TaskDto taskDto){
         Task task = taskMapper.mapToTask(taskDto);
         Task saveTask = service.saveTask(task);
@@ -50,7 +50,7 @@ public class TaskController {
 
     }
 
-    @PostMapping(value = "createTask", consumes = MediaType.APPLICATION_JSON_VALUE)
+    @PostMapping(value = "task", consumes = MediaType.APPLICATION_JSON_VALUE)
     public void createTask(@RequestBody TaskDto taskDto){
         Task task = taskMapper.mapToTask(taskDto);
         service.saveTask(task);
