@@ -6,7 +6,6 @@ import com.crud.tasks.repository.TaskRepository;
 import com.crud.tasks.service.MailCreatorService;
 import com.crud.tasks.service.SimpleEmailService;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.scheduling.annotation.Scheduled;
 import org.springframework.stereotype.Component;
 
 @Component
@@ -16,9 +15,6 @@ public class EmailScheduler {
 
     @Autowired
     private SimpleEmailService simpleEmailService;
-
-    @Autowired
-    private MailCreatorService mailCreatorService;
 
     @Autowired
     private TaskRepository taskRepository;
@@ -37,17 +33,20 @@ public class EmailScheduler {
     //@Scheduled(cron = "0 0 10 * * *")
     public void sendInformationEmail() {
         long size = taskRepository.count();
-        simpleEmailService.send(new Mail(
+        simpleEmailService.sendMailMessage(new Mail(
                 adminConfig.getAdminName(),
                 SUBJECT,
-                "Currently in database you got: " + size + getTaskOrTasksString())
+                "Currently in database You got: " + size + getTaskOrTasksString())
         );
     }
 
-    @Scheduled(cron = "0 0 8 * * *")
+    //@Scheduled(cron = "* * 6 * * *")
     public void sendDailyMail() {
         long size = taskRepository.count();
-        String message = "Currently in database you got: " + size + getTaskOrTasksString();
-        mailCreatorService.buildTrelloCardEmail(message);
+        String message = "Currently in database You got: " + size + getTaskOrTasksString();
+        simpleEmailService.sendMimeMessage(new Mail(
+                adminConfig.getAdminName(),
+                SUBJECT,
+                message));
     }
 }

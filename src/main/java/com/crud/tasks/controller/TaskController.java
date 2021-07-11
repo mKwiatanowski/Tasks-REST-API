@@ -1,61 +1,48 @@
 package com.crud.tasks.controller;
 
-import com.crud.tasks.domain.Task;
 import com.crud.tasks.domain.TaskDto;
 import com.crud.tasks.mapper.TaskMapper;
 import com.crud.tasks.service.DbService;
-import lombok.RequiredArgsConstructor;
-import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
 
+@CrossOrigin(origins = "*")
 @RestController
 @RequestMapping("/v1")
-@RequiredArgsConstructor
-@CrossOrigin(origins = "*")
 public class TaskController {
+    @Autowired
+    private DbService service;
+    @Autowired
+    private TaskMapper taskMapper;
 
-    private final DbService service;
-    private final TaskMapper taskMapper;
-
-    @GetMapping(value = "tasks")
+    @GetMapping(value = "/tasks")
     public List<TaskDto> getTasks() {
-        List<Task> tasks = service.getAllTasks();
-        return taskMapper.mapToTaskDtoList(tasks);
-
+        return taskMapper.mapToTaskDtoList(service.getAllTasks());
     }
 
-    @GetMapping(value = "task")
-    public TaskDto getTask(@RequestParam Long taskId) throws TaskNotFoundException {
+    @GetMapping(value = "/task/{taskId}")
+    public TaskDto getTask(@PathVariable Long taskId) throws TaskNotFoundException {
         return taskMapper.mapToTaskDto(service.getTask(taskId).orElseThrow(TaskNotFoundException::new));
-
     }
 
-    @DeleteMapping(value = "task")
-    public void deleteTask(@RequestParam Long taskId) throws TaskNotFoundException {
-        if (service.getTask(taskId).isPresent()){
+    @DeleteMapping(value = "/task/{taskId}")
+    public void deleteTask(@PathVariable Long taskId) throws TaskNotFoundException {
+        if (service.getTask(taskId).isPresent()) {
             service.deleteTask(taskId);
         } else {
             throw new TaskNotFoundException();
         }
-
     }
 
-    @PutMapping(value = "task")
-    public TaskDto updateTask(@RequestBody TaskDto taskDto){
-        Task task = taskMapper.mapToTask(taskDto);
-        Task saveTask = service.saveTask(task);
-        return taskMapper.mapToTaskDto(saveTask);
-
+    @PutMapping(value = "/task")
+    public TaskDto updateTask(@RequestBody TaskDto taskDto) {
+        return taskMapper.mapToTaskDto(service.saveTask(taskMapper.mapToTask(taskDto)));
     }
 
-    @PostMapping(value = "task", consumes = MediaType.APPLICATION_JSON_VALUE)
-    public void createTask(@RequestBody TaskDto taskDto){
-        Task task = taskMapper.mapToTask(taskDto);
-        service.saveTask(task);
+    @PostMapping(value = "/task")
+    public void createTask(@RequestBody TaskDto taskDto) {
+        service.saveTask(taskMapper.mapToTask(taskDto));
     }
-
-
-
 }
